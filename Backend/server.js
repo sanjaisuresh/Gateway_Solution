@@ -1,8 +1,11 @@
+// server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const applicationController = require('./controllers/applicationController');
+const openingController = require('./controllers/openingController'); // Import opening controller
 require('dotenv').config(); // Load environment variables
 
 const app = express();
@@ -22,9 +25,14 @@ mongoose.connect(process.env.MONGO_URL, {
 app.use(cors());
 app.use(bodyParser.json());
 
-// Routes
+// Routes for applications
 app.post('/apply', applicationController.createApplication);
-app.get('/applications', applicationController.getApplications); // New route to fetch applications
+app.get('/applications', applicationController.getApplications);
+
+// Routes for job openings
+app.post('/openings', openingController.createOpening);
+app.get('/openings', openingController.getOpenings);
+app.delete('/openings/:id', openingController.deleteOpening); // Add this route
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
